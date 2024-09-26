@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="h-1/2 md:h-24 p-4 lg:20 xl:40 text-orange-500 flex items-center justify-between">
+    <div className="h-1/2 md:h-24 p-4 lg:px-20 xl:px-40 text-orange-500 flex items-center justify-between">
       <Link href="/" className="font-bold uppercase text-xl">
         Delizioso
       </Link>
