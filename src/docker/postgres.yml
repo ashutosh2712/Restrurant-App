@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    restart: always
+
+    environment:
+      POSTGRES_DB: restrurant_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres@123
+
+    ports:
+      - 54321:5432
