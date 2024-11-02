@@ -6,7 +6,6 @@ import Image from "next/image";
 import UserLinks from "./UserLinks";
 
 const Navbar = () => {
-  const user = false;
   return (
     <div className="h-12 text-orange-500 p-4 flex justify-between items-center border-b-2 border-b-orange-500 uppercase md:h-24 lg:px-20 xl:px-40">
       <div className="hidden md:flex gap-4 flex-1">
