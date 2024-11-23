@@ -11,4 +11,4 @@ services:
       POSTGRES_PASSWORD: postgres@123
 
     ports:
-      - 54321:5432
+      - 8008:5432
