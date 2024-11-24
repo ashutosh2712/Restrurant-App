@@ -5,7 +5,8 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { toast } from "react-toastify";
 
 const OrdersPage = () => {
   const { data: session, status } = useSession();
@@ -19,7 +20,33 @@ const OrdersPage = () => {
   const { isLoading, error, data } = useQuery("orders", () =>
     fetch("http://localhost:3000/api/orders").then((res) => res.json())
   );
-  console.log("orders:", data);
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: ({ id, status }: { id: String; status: String }) => {
+      return fetch(`http://localhost:3000/api/orders/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(status),
+      });
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const input = form.elements[0] as HTMLInputElement;
+    const status = input.value;
+
+    mutation.mutate({ id, status });
+
+    toast.success("Order status Has been Changed!");
+  };
+
   if (isLoading || status === "loading") return "Loading...";
 
   return (
@@ -50,7 +77,10 @@ const OrdersPage = () => {
               </td>
               {session?.user.isAdmin ? (
                 <td className="py-5 px-1">
-                  <form className="flex items-center justify-center gap-4">
+                  <form
+                    className="flex items-center justify-center gap-4"
+                    onSubmit={(e) => handleUpdate(e, item.id)}
+                  >
                     <input
                       placeholder={item.status}
                       className="p-2 ring ring-orange-100 rounded-md"
