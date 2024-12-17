@@ -1,3 +1,4 @@
+import { getAuthSession } from "@/utils/auth";
 import { prisma } from "@/utils/connect";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -30,4 +31,39 @@ export const GET = async (
       { status: 500 }
     );
   }
+};
+
+// DELETE SINGLE PRODUCT
+export const DELETE = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const { id } = params;
+
+  const session = await getAuthSession();
+
+  if (session?.user.isAdmin) {
+    try {
+      await prisma.product.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      return NextResponse.json(
+        { message: "Product has been deleted!" },
+        { status: 200 }
+      );
+    } catch (err) {
+      console.error(err);
+      return NextResponse.json(
+        { message: "Something went wrong!" },
+        { status: 500 }
+      );
+    }
+  }
+  return NextResponse.json(
+    { message: "Not allowed to delete!" },
+    { status: 403 }
+  );
 };
