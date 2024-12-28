@@ -1,5 +1,6 @@
 "use client";
 
+import { useCartStore } from "@/utils/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -7,6 +8,8 @@ const SuccessPage = () => {
   const seachParams = useSearchParams();
 
   const payment_intent = seachParams.get("payment_intent");
+  const clearCart = useCartStore((state) => state.clearCart);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -15,6 +18,7 @@ const SuccessPage = () => {
         await fetch(`http://localhost:3000/api/confirm/${payment_intent}`, {
           method: "PUT",
         });
+        clearCart();
         router.push("/orders");
       } catch (err) {
         console.log(err);

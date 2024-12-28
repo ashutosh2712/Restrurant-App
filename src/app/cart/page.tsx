@@ -31,7 +31,7 @@ const CartPage = () => {
           }),
         });
         const data = await res.json();
-        console.log("data", data);
+        console.log("cart data", data);
         router.push(`/pay/${data.id}`);
       } catch (err) {
         console.log(err);

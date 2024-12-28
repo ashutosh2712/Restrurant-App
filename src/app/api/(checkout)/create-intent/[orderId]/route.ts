@@ -16,7 +16,8 @@ export const POST = async (
     },
   });
 
-  const orderPrice = order!.price;
+  const orderPrice = Number(order!.price);
+  // console.log("orderPrice : ", orderPrice);
   if (!orderPrice || typeof orderPrice !== "number" || orderPrice <= 0) {
     return NextResponse.json(
       { message: "Invalid order price!" },
@@ -24,10 +25,10 @@ export const POST = async (
     );
   }
 
-  console.log("order from server : ", order);
+  // console.log("order from server : ", order);
   if (order) {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 100 * 100,
+      amount: Math.round(orderPrice * 100),
       currency: "usd",
       automatic_payment_methods: {
         enabled: true,
