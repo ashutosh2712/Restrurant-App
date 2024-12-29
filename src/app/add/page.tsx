@@ -9,7 +9,7 @@ type Inputs = {
   title: string;
   desc: string;
   price: number;
-  catSlung: string;
+  catSlug: string;
 };
 
 type Option = {
@@ -19,11 +19,11 @@ type Option = {
 const AddPage = () => {
   const { data: session, status } = useSession();
 
-  const [input, setInputs] = useState<Inputs>({
+  const [inputs, setInputs] = useState<Inputs>({
     title: "",
     desc: "",
     price: 0,
-    catSlung: "",
+    catSlug: "",
   });
 
   const [option, setOption] = useState<Option>({
@@ -32,8 +32,16 @@ const AddPage = () => {
   });
 
   const [options, setOptions] = useState<Option[]>([]);
-
+  const [image, setImage] = useState<File>();
   const router = useRouter();
+
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  if (status === "unauthenticated" || !session?.user.isAdmin) {
+    router.push("/");
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -55,7 +63,50 @@ const AddPage = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {};
+  const handleChangeImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    const item = (target.files as FileList)[0];
+    setImage(item);
+  };
+
+  const upload = async () => {
+    const data = new FormData();
+    data.append("file", image!);
+    data.append("upload_preset", "restrurantapp");
+    const res = await fetch("https://api.cloudinary.com/v1_1/deeuxev50/image", {
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+      body: data,
+    });
+
+    const resData = await res.json();
+    return resData.url;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const url = await upload();
+      const res = await fetch("http://localhost:3000/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          img: url,
+          ...inputs,
+          options,
+        }),
+      });
+
+      const data = await res.json();
+
+      router.push(`/product/${data.id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div>
       <form
@@ -63,6 +114,15 @@ const AddPage = () => {
         onSubmit={handleSubmit}
       >
         <h1>Add New Product</h1>
+        <div className="w-full flex flex-col">
+          <label>Image</label>
+          <input
+            className="ring-1 ring-orange-200 p-2 rounded-sm"
+            type="file"
+            onChange={handleChangeImg}
+          />
+        </div>
+
         <div className="w-full flex flex-col">
           <label>Title</label>
           <input
@@ -98,7 +158,7 @@ const AddPage = () => {
             onChange={handleChange}
             className="ring-1 ring-orange-200 p-2 rounded-sm"
             type="text"
-            name="category"
+            name="catSlug"
           />
         </div>
 
