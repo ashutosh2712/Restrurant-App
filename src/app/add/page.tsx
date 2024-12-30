@@ -73,11 +73,14 @@ const AddPage = () => {
     const data = new FormData();
     data.append("file", image!);
     data.append("upload_preset", "restrurantapp");
-    const res = await fetch("https://api.cloudinary.com/v1_1/deeuxev50/image", {
-      method: "POST",
-      headers: { "Content-Type": "multipart/form-data" },
-      body: data,
-    });
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/deeuxev50/image/upload",
+      {
+        method: "POST",
+
+        body: data,
+      }
+    );
 
     const resData = await res.json();
     return resData.url;
@@ -90,9 +93,11 @@ const AddPage = () => {
       const url = await upload();
       const res = await fetch("http://localhost:3000/api/products", {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           img: url,
           ...inputs,
