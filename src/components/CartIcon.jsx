@@ -16,7 +16,10 @@ const CartIcon = () => {
       <div className="relative w-8 h-8 md:w-5 md:h-5">
         <Image src="/cart.png" alt="" fill />
       </div>
-      <span>Cart ({totalItems})</span>
+      <span className="flex justify-center">
+        <p>Cart</p>
+        <p> ({totalItems})</p>
+      </span>
     </Link>
   );
 };

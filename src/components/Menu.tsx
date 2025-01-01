@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import CartIcon from "@/components/CartIcon";
+import { useSession } from "next-auth/react";
 const links = [
   { id: 1, title: "Homepage", url: "/" },
   { id: 2, title: "Menu", url: "/menu" },
@@ -14,7 +15,9 @@ const Menu = () => {
   const [open, setOpen] = useState(false);
 
   //   Temporary user
-  const user = false;
+  const { data: session } = useSession();
+  const user = session?.user;
+  // console.log("admin user", user?.isAdmin);
   return (
     <div>
       {!open ? (
@@ -41,6 +44,7 @@ const Menu = () => {
               {item.title}
             </Link>
           ))}
+
           {!user ? (
             <Link href="/login" onClick={() => setOpen(false)}>
               Login
@@ -50,6 +54,7 @@ const Menu = () => {
               Orders
             </Link>
           )}
+
           <CartIcon />
           <div className="flex items-center gap-2 cursor-pointer bg-red-200 px-1 rounded-md">
             <Image src="/phone.png" alt="" width={20} height={20}></Image>
