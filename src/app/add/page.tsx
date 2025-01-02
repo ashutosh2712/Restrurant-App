@@ -1,9 +1,11 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { title } from "process";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 type Inputs = {
   title: string;
@@ -108,23 +110,28 @@ const AddPage = () => {
       const data = await res.json();
 
       router.push(`/product/${data.id}`);
+      toast.success("The product has been added!");
     } catch (err) {
       console.log(err);
     }
   };
   return (
-    <div>
-      <form
-        className="shadow-lg flex flex-wrap gap-4 p-8"
-        onSubmit={handleSubmit}
-      >
+    <div className="p-4 lg:px-20 xl:px-40 flex items-center justify-center text-orange-500">
+      <form className="flex flex-wrap gap-6" onSubmit={handleSubmit}>
         <h1>Add New Product</h1>
-        <div className="w-full flex flex-col">
-          <label>Image</label>
+        <div className="w-full flex flex-col gap-2 ">
+          <label
+            className="text-sm cursor-pointer flex gap-4 items-center"
+            htmlFor="file"
+          >
+            <Image src="/upload.png" alt="" width={64} height={64} />
+            <span>Upload Image</span>
+          </label>
           <input
-            className="ring-1 ring-orange-200 p-2 rounded-sm"
             type="file"
             onChange={handleChangeImg}
+            id="file"
+            className="hidden"
           />
         </div>
 
@@ -132,8 +139,9 @@ const AddPage = () => {
           <label>Title</label>
           <input
             onChange={handleChange}
-            className="ring-1 ring-orange-200 p-2 rounded-sm"
+            className="ring-1 ring-orange-200 p-4 rounded-sm placeholder:text-orange-200 outline-none"
             type="text"
+            placeholder="Bella Napoli"
             name="title"
           />
         </div>
@@ -142,8 +150,9 @@ const AddPage = () => {
           <label>Desc</label>
           <textarea
             onChange={handleChange}
-            className="ring-1 ring-orange-200 p-2 rounded-sm"
+            className="ring-1 ring-orange-200 p-4 rounded-sm placeholder:text-orange-200 outline-none"
             name="desc"
+            placeholder="A timeless favorite with a twist, showcasing a thin crust topped with sweet tomatoes, fresh basil and creamy mozzarella."
           />
         </div>
 
@@ -151,8 +160,9 @@ const AddPage = () => {
           <label>Price</label>
           <input
             onChange={handleChange}
-            className="ring-1 ring-orange-200 p-2 rounded-sm"
+            className="ring-1 ring-orange-200 p-4 rounded-sm placeholder:text-orange-200 outline-none"
             type="number"
+            placeholder="29"
             name="price"
           />
         </div>
@@ -161,32 +171,33 @@ const AddPage = () => {
           <label>Category</label>
           <input
             onChange={handleChange}
-            className="ring-1 ring-orange-200 p-2 rounded-sm"
+            className="ring-1 ring-orange-200 p-4 rounded-sm  placeholder:text-orange-200 outline-none"
             type="text"
+            placeholder="pizzas"
             name="catSlug"
           />
         </div>
 
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col gap-2">
           <label>Options</label>
           <div>
             <input
               onChange={changeOption}
-              className="ring-1 ring-orange-200 p-2 rounded-sm"
+              className="ring-1 ring-orange-200 p-4 rounded-sm placeholder:text-orange-200 outline-none"
               type="text"
               placeholder="Title"
               name="title"
             />
             <input
               onChange={changeOption}
-              className="ring-1 ring-orange-200 p-2 rounded-sm"
+              className="ring-1 ring-orange-200 p-4 rounded-sm placeholder:text-orange-200 outline-none"
               type="number"
               placeholder="Additonal Price"
               name="additonalPrice"
             />
           </div>
           <div
-            className="w-52 bg-orange-500 text-white p-2"
+            className="bg-gray-500 p-2 w-48 rounded-md text-white"
             onClick={() => setOptions((prev) => [...prev, option])}
           >
             Add Option
@@ -195,7 +206,7 @@ const AddPage = () => {
         <div>
           {options.map((item) => (
             <div
-              className="ring-1 p-2 ring-orange-500 rounded-md cursor-pointer"
+              className="p-2  rounded-md cursor-pointer bg-gray-200 text-gray-400"
               key={item.title}
               onClick={() =>
                 setOptions(options.filter((opt) => opt.title !== item.title))
@@ -206,7 +217,10 @@ const AddPage = () => {
             </div>
           ))}
         </div>
-        <button type="submit" className="p-2 w-full bg-orange-500 text-white">
+        <button
+          type="submit"
+          className="bg-orange-500 p-4 text-white w-48 rounded-md relative h-14 flex items-center justify-center"
+        >
           Submit
         </button>
       </form>
