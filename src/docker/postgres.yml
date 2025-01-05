@@ -10,5 +10,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres@123
 
+    volumes:
+      - postgres_prisma_data:/var/lib/postgresql/data
+
     ports:
       - 8008:5432
+
+volumes:
+  postgres_prisma_data:
