@@ -1,7 +1,7 @@
 import { ProductType } from "@/types/types";
 import Image from "next/image";
 import React from "react";
-import FeaturedAddToCart from "./FeaturedAddToCart";
+
 import Link from "next/link";
 
 const getData = async () => {
