@@ -25,7 +25,7 @@ COPY --from=builder /app ./
 # Set production environment
 ENV NODE_ENV=production
 ENV DATABASE_URL="postgresql://postgres:postgres@123@db:5432/restrurant_db"
-EXPOSE 3000
+EXPOSE 3000 5555
 
 # Apply Prisma migrations before starting the app
-CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+CMD ["npm", "run",  "start:migrate:prod"]
