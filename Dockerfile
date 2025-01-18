@@ -27,5 +27,5 @@ ENV NODE_ENV=production
 ENV DATABASE_URL="postgresql://postgres:postgres@123@db:5432/restrurant_db"
 EXPOSE 3000 5555
 
-# Apply Prisma migrations before starting the app
+# Apply Prisma migrations
 CMD ["npm", "run",  "start:migrate:prod"]

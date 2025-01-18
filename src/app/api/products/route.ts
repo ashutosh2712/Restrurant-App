@@ -27,8 +27,25 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
+    // Validate required fields
+    const { title, desc, price, img, catSlug, options } = body;
+    if (!title || !desc || !price || !catSlug) {
+      return NextResponse.json(
+        { message: "Missing required fields: title, desc, price, catSlug" },
+        { status: 400 }
+      );
+    }
+
+    // Create the product in the database
     const product = await prisma.product.create({
-      data: body,
+      data: {
+        title,
+        desc,
+        img: img || null, // Handle optional `img`
+        price: price.toString(), // Convert price to string for Decimal
+        catSlug,
+        options: options || [], // Default to empty array if options is undefined
+      },
     });
 
     return new NextResponse(JSON.stringify(product), { status: 201 });

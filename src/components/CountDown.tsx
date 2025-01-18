@@ -2,7 +2,9 @@
 import React from "react";
 import Countdown from "react-countdown";
 
-const endingDate = new Date("2024-09-02");
+// Calculate the end date dynamically (1 day from now)
+const endingDate = new Date();
+endingDate.setDate(endingDate.getDate() + 1); // Add 1 day to the current date
 
 const CountDown = () => {
   return (

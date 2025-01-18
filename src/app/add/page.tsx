@@ -10,13 +10,13 @@ import { toast } from "react-toastify";
 type Inputs = {
   title: string;
   desc: string;
-  price: number;
+  price: string;
   catSlug: string;
 };
 
 type Option = {
   title: string;
-  additonalPrice: number;
+  additionalPrice: number;
 };
 const AddPage = () => {
   const { data: session, status } = useSession();
@@ -24,13 +24,13 @@ const AddPage = () => {
   const [inputs, setInputs] = useState<Inputs>({
     title: "",
     desc: "",
-    price: 0,
+    price: "",
     catSlug: "",
   });
 
   const [option, setOption] = useState<Option>({
     title: "",
-    additonalPrice: 0,
+    additionalPrice: 0,
   });
 
   const [options, setOptions] = useState<Option[]>([]);
@@ -49,20 +49,21 @@ const AddPage = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setInputs((prev) => {
+      const { name, value } = e.target;
       return {
         ...prev,
-        [e.target.name]: e.target.value,
+        [name]: value,
       };
     });
   };
 
   const changeOption = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOption((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
+    const { name, value } = e.target;
+
+    setOption((prev) => ({
+      ...prev,
+      [name]: name === "additionalPrice" ? parseFloat(value) || 0 : value, // Ensure `additionalPrice` is a number
+    }));
   };
 
   const handleChangeImg = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +94,7 @@ const AddPage = () => {
 
     try {
       const url = await upload();
+      const parsedPrice = parseFloat(inputs.price);
       const res = await fetch("http://localhost:3000/api/products", {
         method: "POST",
 
@@ -103,6 +105,7 @@ const AddPage = () => {
         body: JSON.stringify({
           img: url,
           ...inputs,
+          price: parsedPrice.toString(),
           options,
         }),
       });
@@ -161,7 +164,7 @@ const AddPage = () => {
           <input
             onChange={handleChange}
             className="ring-1 ring-orange-200 p-4 rounded-sm placeholder:text-orange-200 outline-none"
-            type="number"
+            type="text"
             placeholder="29"
             name="price"
           />
@@ -193,7 +196,7 @@ const AddPage = () => {
               className="ring-1 ring-orange-200 p-4 rounded-sm placeholder:text-orange-200 outline-none"
               type="number"
               placeholder="Additonal Price"
-              name="additonalPrice"
+              name="additionalPrice"
             />
           </div>
           <div
@@ -213,7 +216,7 @@ const AddPage = () => {
               }
             >
               <span>{item.title}</span>
-              <span>${item.additonalPrice}</span>
+              <span>${item.additionalPrice}</span>
             </div>
           ))}
         </div>

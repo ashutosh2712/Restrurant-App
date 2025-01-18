@@ -7,7 +7,6 @@ export const PUT = async (
 ) => {
   const { intentId } = params;
   try {
-    console.log("intentId : ", intentId);
     await prisma.order.update({
       where: { intent_id: intentId },
       data: { status: "Being prepared!" },
