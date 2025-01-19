@@ -17,8 +17,6 @@ USER appuser
 # Copy application code
 COPY . .
 
-RUN chown -R appuser:appgroup /app
-
 # Generate Prisma Client
 RUN npx prisma generate
 
