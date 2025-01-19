@@ -18,14 +18,15 @@ RUN npm install
 
 # Copy application code
 COPY . .
+COPY .next .next
 
 # Generate Prisma Client
 RUN npx prisma generate
 
-RUN mkdir -p /app/.next && chown -R appuser:appgroup /app/.next
+# RUN mkdir -p /app/.next && chown -R appuser:appgroup /app/.next
 
 # Build the application
-RUN npm run build
+# RUN npm run build
 
 FROM node:18-alpine AS production
 WORKDIR /app
