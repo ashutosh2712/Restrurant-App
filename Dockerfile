@@ -5,13 +5,13 @@ WORKDIR /app
 RUN apk add --no-cache openssl
 
 # Set a non-root user and ensure /app is writable
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Install application dependencies
 COPY package.json package-lock.json ./
 
-RUN chown -R appuser:appgroup /app
-USER appuser
+# RUN chown -R appuser:appgroup /app
+# USER appuser
 
 RUN npm install
 
@@ -35,13 +35,13 @@ WORKDIR /app
 RUN apk add --no-cache openssl
 
 # Set a non-root user and ensure /app is writable
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Copy built application
 COPY --from=builder /app ./
 
-RUN chown -R appuser:appgroup /app
-USER appuser
+# RUN chown -R appuser:appgroup /app
+# USER appuser
 # Expose the application port
 
 EXPOSE 3000 5555
