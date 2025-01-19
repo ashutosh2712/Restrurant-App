@@ -9,10 +9,12 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Install application dependencies
 COPY package.json package-lock.json ./
-RUN npm install
 
 RUN chown -R appuser:appgroup /app
 USER appuser
+
+RUN npm install
+
 
 # Copy application code
 COPY . .
