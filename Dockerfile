@@ -1,8 +1,8 @@
 # Stage 1: Build the application
 FROM node:18-alpine AS builder
 
-# Install OpenSSL and libssl-dev
-RUN apk add --no-cache openssl libssl3 libcrypto3
+# Install OpenSSL and other dependencies
+RUN apk add --no-cache openssl=3.0.8-r0 libssl3 libcrypto3 libc6-compat
 
 WORKDIR /app
 
