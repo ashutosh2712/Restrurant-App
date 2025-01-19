@@ -44,7 +44,7 @@ COPY --from=builder /app ./
 # USER appuser
 # Expose the application port
 
-EXPOSE 3000 5555
+EXPOSE 3000
 
 ENV HOSTNAME="0.0.0.0"
 # Apply Prisma migrations
