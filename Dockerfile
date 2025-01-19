@@ -1,35 +1,32 @@
-# Stage 1: Build the application
 FROM node:18-alpine AS builder
-
-# Install OpenSSL and other dependencies
-RUN apk add --no-cache openssl=3.0.8-r0 libssl3 libcrypto3 libc6-compat
-
 WORKDIR /app
 
-# Copy and install dependencies
+# Install OpenSSL and other dependencies
+RUN apk add --no-cache openssl
+
+# Install application dependencies
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy all project files
+# Copy application code
 COPY . .
 
-
-
-# Generate Prisma client
+# Generate Prisma Client
 RUN npx prisma generate
 
 # Build the application
 RUN npm run build
 
-# Stage 2: Run the application
-FROM node:18-alpine
+FROM node:18-alpine AS production
 WORKDIR /app
 
-# Copy the built app from the builder stage
+# Install runtime dependencies
+RUN apk add --no-cache openssl
+
+# Copy built application
 COPY --from=builder /app ./
 
-# Set production environment
-ENV NODE_ENV=production
+# Expose the application port
 
 EXPOSE 3000 5555
 
