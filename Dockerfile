@@ -1,5 +1,8 @@
 # Stage 1: Build the application
 FROM node:18-alpine AS builder
+
+RUN apt-get update && apt-get install -y openssl libssl-dev
+
 WORKDIR /app
 
 # Copy and install dependencies
@@ -8,6 +11,8 @@ RUN npm install
 
 # Copy all project files
 COPY . .
+
+
 
 # Generate Prisma client
 RUN npx prisma generate
