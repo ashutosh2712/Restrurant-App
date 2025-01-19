@@ -8,6 +8,9 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+
 const OrdersPage = () => {
   const { data: session, status } = useSession();
 
@@ -18,13 +21,13 @@ const OrdersPage = () => {
   }
 
   const { isLoading, error, data } = useQuery("orders", () =>
-    fetch("http://localhost:3000/api/orders").then((res) => res.json())
+    fetch(`${API_BASE_URL}/api/orders`).then((res) => res.json())
   );
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: ({ id, status }: { id: String; status: String }) => {
-      return fetch(`http://localhost:3000/api/orders/${id}`, {
+      return fetch(`${API_BASE_URL}/api/orders/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

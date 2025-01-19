@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+
 const DeleteButton = ({ id }: { id: string }) => {
   const { data: session, status } = useSession();
 
@@ -18,7 +21,7 @@ const DeleteButton = ({ id }: { id: string }) => {
   }
 
   const handleDelete = async () => {
-    const res = await fetch(`http://localhost:3000/api/products/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/api/products/${id}`, {
       method: "DELETE",
     });
 

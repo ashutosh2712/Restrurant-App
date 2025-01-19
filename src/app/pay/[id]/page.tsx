@@ -9,6 +9,9 @@ import {
 } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
@@ -21,12 +24,9 @@ const PayPage = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     const makeRequest = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/create-intent/${id}`,
-          {
-            method: "POST",
-          }
-        );
+        const res = await fetch(`${API_BASE_URL}/api/create-intent/${id}`, {
+          method: "POST",
+        });
         console.log("res: ", res);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

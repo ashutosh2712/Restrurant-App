@@ -4,6 +4,9 @@ import { useCartStore } from "@/utils/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+
 const SuccessPage = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -22,7 +25,7 @@ const SuccessContent = () => {
     const makeRequest = async () => {
       try {
         if (payment_intent) {
-          await fetch(`http://localhost:3000/api/confirm/${payment_intent}`, {
+          await fetch(`${API_BASE_URL}/api/confirm/${payment_intent}`, {
             method: "PUT",
           });
           clearCart();

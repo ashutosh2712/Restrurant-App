@@ -3,9 +3,12 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { title } from "process";
+
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
 type Inputs = {
   title: string;
@@ -95,7 +98,7 @@ const AddPage = () => {
     try {
       const url = await upload();
       const parsedPrice = parseFloat(inputs.price);
-      const res = await fetch("http://localhost:3000/api/products", {
+      const res = await fetch(`${API_BASE_URL}/api/products`, {
         method: "POST",
 
         headers: {
