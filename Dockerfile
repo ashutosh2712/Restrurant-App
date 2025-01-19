@@ -4,6 +4,11 @@ WORKDIR /app
 # Install OpenSSL and other dependencies
 RUN apk add --no-cache openssl
 
+# Set a non-root user and ensure /app is writable
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN chown -R appuser:appgroup /app
+USER appuser
+
 # Install application dependencies
 COPY package.json package-lock.json ./
 RUN npm install
@@ -22,6 +27,11 @@ WORKDIR /app
 
 # Install runtime dependencies
 RUN apk add --no-cache openssl
+
+# Set a non-root user and ensure /app is writable
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN chown -R appuser:appgroup /app
+USER appuser
 
 # Copy built application
 COPY --from=builder /app ./
