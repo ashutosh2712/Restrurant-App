@@ -29,7 +29,7 @@ services:
       - .env
     depends_on:
       - db
-    command: next start -H 0.0.0.0 -p 3000
+    command: next start
     volumes:
       - .:/app
       - /app/node_modules
