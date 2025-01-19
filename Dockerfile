@@ -22,6 +22,8 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
+RUN mkdir -p /app/.next && chown -R appuser:appgroup /app/.next
+
 # Build the application
 RUN npm run build
 
