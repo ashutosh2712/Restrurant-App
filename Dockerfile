@@ -46,5 +46,6 @@ COPY --from=builder /app ./
 
 EXPOSE 3000 5555
 
+ENV HOSTNAME="0.0.0.0"
 # Apply Prisma migrations
 CMD ["npm", "run",  "start:migrate:prod"]
