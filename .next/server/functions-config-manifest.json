@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/create-intent/[orderId]":{},"/api/confirm/[intentId]":{},"/api/orders/[id]":{},"/api/orders":{},"/api/categories":{},"/api/products/[id]":{},"/api/products":{},"/success":{}}}
+{"version":1,"functions":{"/api/confirm/[intentId]":{},"/api/categories":{},"/api/create-intent/[orderId]":{},"/api/orders/[id]":{},"/api/products/[id]":{},"/api/orders":{},"/api/products":{},"/success":{}}}
